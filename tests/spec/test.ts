@@ -2,7 +2,6 @@ import {
 	getPattern,
 	list,
 	isai,
-	isaiNaive,
 	isaiMatch,
 	isaiMatches,
 	isaiPattern,
@@ -19,16 +18,6 @@ const AI_USER_AGENT_EXAMPLE =
 const BROWSER_USER_AGENT_EXAMPLE =
 	"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91 Safari/537.36";
 
-const USER_AGENT_COMMON = [
-	"Ada Chat Bot/1.0 Request Block",
-	"Mozilla/5.0 (compatible; Yahoo! Slurp; http://help.yahoo.com/help/us/ysearch/slurp)",
-	"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/94.0.4590.2 Safari/537.36 Chrome-Lighthouse",
-];
-const USER_AGENT_GOTCHAS = [
-	"Mozilla/5.0 (Linux; Android 10; CUBOT_X30) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/94.0.4606.85 Mobile Safari/537.36",
-	"PS4Application libhttp/1.000 (PS4) CoreMedia libhttp/6.72 (PlayStation 4)",
-];
-
 describe("isai", () => {
 	describe("features", () => {
 		test("pattern: pattern is a regex", () => {
@@ -42,20 +31,20 @@ describe("isai", () => {
 			expect(isai(AI_USER_AGENT_EXAMPLE)).toBe(true);
 		});
 		test("isaiMatch: find pattern in bot user agent string", () => {
-			expect(isaiMatch(AI_USER_AGENT_EXAMPLE)).toBe("https://openai.com/searchbot");
+			expect(isaiMatch(AI_USER_AGENT_EXAMPLE)).toBe("openai.com/searchbot");
 		});
 		test("isaiMatches: find all patterns in bot user agent string", () => {
-			expect(isaiMatches(AI_USER_AGENT_EXAMPLE)).toContain("https://openai.com/searchbot");
+			expect(isaiMatches(AI_USER_AGENT_EXAMPLE)).toContain("openai.com/searchbot");
 			expect(isaiMatches(AI_USER_AGENT_EXAMPLE)).toHaveLength(1);
 		});
 		test("isaiPattern: find first pattern in bot user agent string", () => {
 			expect(isaiPattern(AI_USER_AGENT_EXAMPLE)).toBe(
-				"https://openai.com/searchbot",
+				"openai.*bot",
 			);
 		});
 		test("isaiPatterns: find all patterns in bot user agent string", () => {
 			expect(isaiPatterns(AI_USER_AGENT_EXAMPLE)).toContain(
-				"https://openai.com/searchbot",
+				"openai.*bot",
 			);
 			expect(isaiPatterns(AI_USER_AGENT_EXAMPLE)).toHaveLength(1);
 		});
@@ -64,19 +53,19 @@ describe("isai", () => {
 			expect(customisai(AI_USER_AGENT_EXAMPLE)).toBe(true);
 		});
 		test("createisaiFromList: create custom isai function with custom pattern", () => {
-			const ChromeLighthouseUserAgentStrings: string[] = [
-				"Mozilla/5.0 AppleWebKit/537.36 (KHTML, like Gecko); compatible; ChatGPT-User/1.0; +https://openai.com/bot",
-				"Mozilla/5.0 AppleWebKit/537.36 (KHTML, like Gecko); compatible; GPTBot/1.1; +https://openai.com/gptbot",
+			const ToRemoveStrings: string[] = [
+				"openai.*bot"
 			];
 			const patternsToRemove: Set<string> = new Set(
-				ChromeLighthouseUserAgentStrings.map(isaiMatches).flat(),
+				ToRemoveStrings.map(isaiMatches).flat(),
 			);
-			const isai2 = createisaiFromList(
-				list.filter(
-					(record: string): boolean => patternsToRemove.has(record) === false,
-				),
+			expect(patternsToRemove.size).toBeGreaterThan(0);
+			const list2 = list.filter(
+				(record: string): boolean => patternsToRemove.has(record) === false,
 			);
-			const [ua] = ChromeLighthouseUserAgentStrings;
+			expect(list2.length).toBeLessThan(list.length);
+			const isai2 = createisaiFromList(list2);
+			const ua = "https://openai.com/gptbot"
 			expect(isai(ua)).toBe(true);
 			expect(isai2(ua)).toBe(false);
 		});
@@ -88,27 +77,6 @@ describe("isai", () => {
 				expect(isaiMatches(value)).toEqual([]);
 				expect(isaiPattern(value)).toBe(null);
 				expect(isaiPatterns(value)).toEqual([]);
-			},
-		);
-	});
-
-	describe("isaiNaive", () => {
-		test.each([75])(
-			"a large number of user agent strings can be detected (>%s%)",
-			(percent) => {
-				const ratio =
-					crawlers.filter((ua) => isaiNaive(ua)).length / crawlers.length;
-				expect(ratio).toBeLessThanOrEqual(1);
-				expect(ratio).toBeGreaterThan(percent / 100);
-			},
-		);
-		test.each([1])(
-			"a small number of browsers is falsly detected as bots (<%s%)",
-			(percent) => {
-				const ratio =
-					browsers.filter((ua) => isaiNaive(ua)).length / browsers.length;
-				expect(ratio).toBeGreaterThan(0);
-				expect(ratio).toBeLessThan(percent / 100);
 			},
 		);
 	});
@@ -131,20 +99,6 @@ describe("isai", () => {
 		});
 		afterAll(() => {
 			jest.restoreAllMocks();
-		});
-		test("fallback regex detects commong crawlers", () => {
-			USER_AGENT_COMMON.forEach((ua) => {
-				if (!isaiInstance(ua)) {
-					throw new Error(`Failed to detect ${ua} as bot`);
-				}
-			});
-		});
-		test("fallback detects gotchas as bots", () => {
-			USER_AGENT_GOTCHAS.forEach((ua) => {
-				if (!isaiInstance(ua)) {
-					throw new Error(`Failed to detect ${ua} as bot (gotcha)`);
-				}
-			});
 		});
 		test("fallback does not detect browser as bot", () => {
 			expect(isaiInstance(BROWSER_USER_AGENT_EXAMPLE)).toBe(false);
@@ -189,7 +143,7 @@ describe("isai", () => {
 		});
 		test("regular expressions exports are as expected", () => {
 			expect(new RegExp(fullPattern, "i").toString()).toBe(
-				getPattern().toString(),
+				getPattern()?.toString(),
 			);
 		});
 	});

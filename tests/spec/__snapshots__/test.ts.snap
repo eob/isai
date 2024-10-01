@@ -7,10 +7,6 @@ exports[`isai module interface interface is as expected 1`] = `
     "Array",
   ],
   [
-    "isaiNaive",
-    "Function",
-  ],
-  [
     "createisai",
     "Function",
   ],

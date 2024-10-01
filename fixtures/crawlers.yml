@@ -1,8 +1,19 @@
 Google Notebook LLM:
   - Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)GoogleOther
+Google Extended:
+  - Google-Extended
 OpenAI SearchBot:
   - Mozilla/5.0 AppleWebKit/537.36 (KHTML, like Gecko); compatible; OAI-SearchBot/1.0; +https://openai.com/searchbot
 OpenAI ChatGPT User:
   - Mozilla/5.0 AppleWebKit/537.36 (KHTML, like Gecko); compatible; ChatGPT-User/1.0; +https://openai.com/bot
 OpenAI GPTBot:
   - Mozilla/5.0 AppleWebKit/537.36 (KHTML, like Gecko); compatible; GPTBot/1.1; +https://openai.com/gptbot
+ClaudBot:
+  - Claude-Web/1.0 (web crawler; +https://www.anthropic.com/; bots@anthropic.com)
+  - ClaudeBot
+  - anthropic-ai
+  - Claude-Web
+PerplexityBot:
+  - PerplexityBot
+Cohere:
+  - cohere-ai

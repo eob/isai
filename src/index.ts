@@ -1,23 +1,17 @@
 import patternsList from "./patterns.json";
 import { fullPattern } from "./pattern";
 
-/**
- * Naive bot pattern.
- */
-const naivePattern = /bot|crawl|http|lighthouse|scan|search|spider/i;
-
 let pattern: RegExp;
-export function getPattern(): RegExp {
+export function getPattern(): RegExp | null {
 	if (pattern instanceof RegExp) {
 		return pattern;
 	}
 	try {
 		// Build this RegExp dynamically to avoid syntax errors in older engines.
-		pattern = new RegExp(fullPattern, "i");
+		return new RegExp(fullPattern, "i");
 	} catch (error) {
-		pattern = naivePattern;
+		return null;
 	}
-	return pattern;
 }
 
 /**
@@ -26,16 +20,10 @@ export function getPattern(): RegExp {
 export const list: string[] = patternsList.map((pattern) => pattern.pattern);
 
 /**
- * Check if the given user agent includes a bot pattern. Naive implementation (less accurate).
- */
-export const isaiNaive = (userAgent?: string | null): boolean =>
-	Boolean(userAgent) && naivePattern.test(userAgent);
-
-/**
  * Check if the given user agent includes a bot pattern.
  */
 export function isai(userAgent?: string | null): boolean {
-	return Boolean(userAgent) && getPattern().test(userAgent);
+	return Boolean(userAgent) && getPattern()?.test(userAgent) || false;
 }
 
 /**

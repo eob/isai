@@ -10,7 +10,7 @@
     ]
   },
   {
-    "pattern": "https://openai.com/gptbot", 
+    "pattern": "openai.*bot", 
     "confidence": 1.0,
     "reasonsFor": [
       "Published user agent substring by OpenAI"
@@ -19,21 +19,57 @@
     ]
   },
   {
-    "pattern": "https://openai.com/searchbot", 
+    "pattern": "^ClaudeBot", 
     "confidence": 1.0,
     "reasonsFor": [
-      "Published user agent substring by OpenAI"
+      "Reported Anthropic Claude user agent string"
     ],
     "reasonsAgainst": [
     ]
   },
   {
-    "pattern": "https://openai.com/bot", 
+    "pattern": "^anthropic", 
     "confidence": 1.0,
     "reasonsFor": [
-      "Published user agent substring by OpenAI"
+      "Reported Anthropic Claude user agent string"
     ],
     "reasonsAgainst": [
     ]
-  }
+  },
+  {
+    "pattern": "^Claude-Web", 
+    "confidence": 1.0,
+    "reasonsFor": [
+      "Reported Anthropic Claude user agent string"
+    ],
+    "reasonsAgainst": [
+    ]
+  },
+  {
+    "pattern": "^PerplexityBot", 
+    "confidence": 1.0,
+    "reasonsFor": [
+      "Reported Perplexity bot string" 
+    ],
+    "reasonsAgainst": [
+    ]
+  },
+  {
+    "pattern": "^cohere-ai", 
+    "confidence": 1.0,
+    "reasonsFor": [
+      "Reported Cohere bot string" 
+    ],
+    "reasonsAgainst": [
+    ]
+  },
+  {
+    "pattern": "^Google-Extended", 
+    "confidence": 1.0,
+    "reasonsFor": [
+      "Reported Google Bard bot string" 
+    ],
+    "reasonsAgainst": [
+    ]
+  }  
 ]
