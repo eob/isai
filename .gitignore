@@ -1,0 +1,9 @@
+node_modules
+
+# Auomatically built files
+/src/pattern.ts
+/index*
+/*.d.ts
+/fixtures/index.json
+/AUTHORS
+/docs
