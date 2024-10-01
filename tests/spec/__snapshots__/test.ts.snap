@@ -1,0 +1,46 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`isai module interface interface is as expected 1`] = `
+[
+  [
+    "list",
+    "Array",
+  ],
+  [
+    "isaiNaive",
+    "Function",
+  ],
+  [
+    "createisai",
+    "Function",
+  ],
+  [
+    "createisaiFromList",
+    "Function",
+  ],
+  [
+    "isaiMatch",
+    "Function",
+  ],
+  [
+    "isaiMatches",
+    "Function",
+  ],
+  [
+    "isaiPattern",
+    "Function",
+  ],
+  [
+    "isaiPatterns",
+    "Function",
+  ],
+  [
+    "getPattern",
+    "Function",
+  ],
+  [
+    "isai",
+    "Function",
+  ],
+]
+`;
