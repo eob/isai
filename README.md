@@ -4,7 +4,7 @@
 
 [![](./page/isai.svg)](https://isai.js.org)
 
-Identify bots, crawlers, and spiders using the user agent string.
+Identify AIs using the user agent string.
 
 ## Usage
 
@@ -33,7 +33,7 @@ isai(navigator.userAgent);
 
 // User Agent string
 isai(
-  "Mozilla/5.0 (iPhone; CPU iPhone OS 6_0 like Mac OS X) AppleWebKit/536.26 (KHTML, like Gecko) Version/6.0 Mobile/10A5376e Safari/8536.25 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)",
+  "Mozilla/5.0 AppleWebKit/537.36 (KHTML, like Gecko); compatible; OAI-SearchBot/1.0; +https://openai.com/searchbot",
 ); // true
 
 isai(
@@ -64,24 +64,38 @@ UMD
 </script>
 ```
 
-## All named imports
+## Named imports
 
 | import              | Type                             | Description                                                                  |
 | ------------------- | -------------------------------- | ---------------------------------------------------------------------------- |
-| isai                | _(string?): boolean_             | Check if the user agent is a bot                                             |
-| getPattern          | (): _RegExp_                     | The regular expression used to identify bots                                 |
-| list                | _string[]_                       | List of all individual pattern parts                                         |
+| isai                | _(string?): boolean_             | Check if the user agent is an AI                                             |
 
 
-## Definitions
+## FAW
 
-- **AI.** An automated process using the web on behalf of an LLM.
+### Why are AIs distinct from bots and crawlers?
 
-## Clarifications
+AIs process information differently than web crawlers:
+
+* The goal of a crawler is to build a web index, so web developers are incentivised to return **more** rather than **less**: more keywords, more re-phrasings, more elaborations.
+* The goal of an AI is to answer acute questions, so web developers are incentivised to return **less** rather than **more**: short, specific sentences written in such a way that an LLM can make the most use of them.
 
 ### What does "isai" do?
 
+Isai approximates whether the originator of a web request is an AI Bot. It does this by looking at the User Agent string.
+
 ### What doesn't "isai" do?
+
+Isai does not provide a perfectly accurate prediction:
+
+- Some companies, such as Google and Apple, use ambiguous User Agent strings, meaning that the `AI, not AI` decision is, at best, a guess.
+- No company is required to divulge whether their bot is an AI, so false negatives are virtually guaranteed.
 
 ### Why would I want to identify an AI?
 
+You may want to identify an AI if you wish to inject additional and/or different information into your web page for the AI to consume.
+
+For example, you may wish to:
+
+- Provide an overview of the key points of a page in such a way that would be odd for human consumption.
+- Provide a slightly different set of information for the AI to build up context that it might not otherwise have.
