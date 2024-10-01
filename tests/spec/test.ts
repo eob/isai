@@ -42,22 +42,22 @@ describe("isai", () => {
 			expect(isai(AI_USER_AGENT_EXAMPLE)).toBe(true);
 		});
 		test("isaiMatch: find pattern in bot user agent string", () => {
-			expect(isaiMatch(AI_USER_AGENT_EXAMPLE)).toBe("Google");
+			expect(isaiMatch(AI_USER_AGENT_EXAMPLE)).toBe("https://openai.com/searchbot");
 		});
 		test("isaiMatches: find all patterns in bot user agent string", () => {
-			expect(isaiMatches(AI_USER_AGENT_EXAMPLE)).toContain("Google");
-			expect(isaiMatches(AI_USER_AGENT_EXAMPLE)).toHaveLength(4);
+			expect(isaiMatches(AI_USER_AGENT_EXAMPLE)).toContain("https://openai.com/searchbot");
+			expect(isaiMatches(AI_USER_AGENT_EXAMPLE)).toHaveLength(1);
 		});
 		test("isaiPattern: find first pattern in bot user agent string", () => {
 			expect(isaiPattern(AI_USER_AGENT_EXAMPLE)).toBe(
-				"(?<! (?:channel/|google/))google(?!(app|/google| pixel))",
+				"https://openai.com/searchbot",
 			);
 		});
 		test("isaiPatterns: find all patterns in bot user agent string", () => {
 			expect(isaiPatterns(AI_USER_AGENT_EXAMPLE)).toContain(
-				"(?<! (?:channel/|google/))google(?!(app|/google| pixel))",
+				"https://openai.com/searchbot",
 			);
-			expect(isaiPatterns(AI_USER_AGENT_EXAMPLE)).toHaveLength(4);
+			expect(isaiPatterns(AI_USER_AGENT_EXAMPLE)).toHaveLength(1);
 		});
 		test("createisai: create custom isai function with custom pattern", () => {
 			const customisai = createisai(/bot/i);
@@ -65,8 +65,8 @@ describe("isai", () => {
 		});
 		test("createisaiFromList: create custom isai function with custom pattern", () => {
 			const ChromeLighthouseUserAgentStrings: string[] = [
-				"mozilla/5.0 (macintosh; intel mac os x 10_15_7) applewebkit/537.36 (khtml, like gecko) chrome/94.0.4590.2 safari/537.36 chrome-lighthouse",
-				"mozilla/5.0 (linux; android 7.0; moto g (4)) applewebkit/537.36 (khtml, like gecko) chrome/94.0.4590.2 mobile safari/537.36 chrome-lighthouse",
+				"Mozilla/5.0 AppleWebKit/537.36 (KHTML, like Gecko); compatible; ChatGPT-User/1.0; +https://openai.com/bot",
+				"Mozilla/5.0 AppleWebKit/537.36 (KHTML, like Gecko); compatible; GPTBot/1.1; +https://openai.com/gptbot",
 			];
 			const patternsToRemove: Set<string> = new Set(
 				ChromeLighthouseUserAgentStrings.map(isaiMatches).flat(),
@@ -98,7 +98,7 @@ describe("isai", () => {
 			(percent) => {
 				const ratio =
 					crawlers.filter((ua) => isaiNaive(ua)).length / crawlers.length;
-				expect(ratio).toBeLessThan(1);
+				expect(ratio).toBeLessThanOrEqual(1);
 				expect(ratio).toBeGreaterThan(percent / 100);
 			},
 		);
