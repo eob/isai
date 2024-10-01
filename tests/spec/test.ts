@@ -14,8 +14,8 @@ import { fullPattern } from "../../src/pattern";
 import { crawlers, browsers } from "../../fixtures";
 let isaiInstance: any;
 
-const BOT_USER_AGENT_EXAMPLE =
-	"Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)";
+const AI_USER_AGENT_EXAMPLE =
+	"Mozilla/5.0 AppleWebKit/537.36 (KHTML, like Gecko); compatible; OAI-SearchBot/1.0; +https://openai.com/searchbot";
 const BROWSER_USER_AGENT_EXAMPLE =
 	"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91 Safari/537.36";
 
@@ -38,30 +38,30 @@ describe("isai", () => {
 			expect(list).toBeInstanceOf(Array);
 			expect(list.every((item) => typeof item === "string")).toBe(true);
 		});
-		test("isai: bot user agect string is recognised as bot", () => {
-			expect(isai(BOT_USER_AGENT_EXAMPLE)).toBe(true);
+		test("isai: bot user agent string is recognised as an AI", () => {
+			expect(isai(AI_USER_AGENT_EXAMPLE)).toBe(true);
 		});
 		test("isaiMatch: find pattern in bot user agent string", () => {
-			expect(isaiMatch(BOT_USER_AGENT_EXAMPLE)).toBe("Google");
+			expect(isaiMatch(AI_USER_AGENT_EXAMPLE)).toBe("Google");
 		});
 		test("isaiMatches: find all patterns in bot user agent string", () => {
-			expect(isaiMatches(BOT_USER_AGENT_EXAMPLE)).toContain("Google");
-			expect(isaiMatches(BOT_USER_AGENT_EXAMPLE)).toHaveLength(4);
+			expect(isaiMatches(AI_USER_AGENT_EXAMPLE)).toContain("Google");
+			expect(isaiMatches(AI_USER_AGENT_EXAMPLE)).toHaveLength(4);
 		});
 		test("isaiPattern: find first pattern in bot user agent string", () => {
-			expect(isaiPattern(BOT_USER_AGENT_EXAMPLE)).toBe(
+			expect(isaiPattern(AI_USER_AGENT_EXAMPLE)).toBe(
 				"(?<! (?:channel/|google/))google(?!(app|/google| pixel))",
 			);
 		});
 		test("isaiPatterns: find all patterns in bot user agent string", () => {
-			expect(isaiPatterns(BOT_USER_AGENT_EXAMPLE)).toContain(
+			expect(isaiPatterns(AI_USER_AGENT_EXAMPLE)).toContain(
 				"(?<! (?:channel/|google/))google(?!(app|/google| pixel))",
 			);
-			expect(isaiPatterns(BOT_USER_AGENT_EXAMPLE)).toHaveLength(4);
+			expect(isaiPatterns(AI_USER_AGENT_EXAMPLE)).toHaveLength(4);
 		});
 		test("createisai: create custom isai function with custom pattern", () => {
 			const customisai = createisai(/bot/i);
-			expect(customisai(BOT_USER_AGENT_EXAMPLE)).toBe(true);
+			expect(customisai(AI_USER_AGENT_EXAMPLE)).toBe(true);
 		});
 		test("createisaiFromList: create custom isai function with custom pattern", () => {
 			const ChromeLighthouseUserAgentStrings: string[] = [
@@ -165,7 +165,7 @@ describe("isai", () => {
 			expect(misidentifiedStrings).toEqual([]);
 			expect(successCount).toBe(crawlers.length);
 		});
-		test(`✘ ${browsers.length} user agent string should not be recognised as crawler`, () => {
+		test(`✘ ${browsers.length} user agent string should not be recognised as an AI`, () => {
 			let successCount = 0;
 			let misidentifiedStrings: string[] = [];
 			browsers.forEach((browser) => {

@@ -11,7 +11,7 @@ const patterns = JSON.parse(
 
 const pattern = new RegExp(
 	patterns
-		.map((pattern) => pattern.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"))
+		.map((pattern) => pattern.pattern.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"))
 		.join("|"),
 ).source;
 

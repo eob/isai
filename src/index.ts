@@ -23,7 +23,7 @@ export function getPattern(): RegExp {
 /**
  * A list of bot identifiers to be used in a regular expression against user agent strings.
  */
-export const list: string[] = patternsList;
+export const list: string[] = patternsList.map((pattern) => pattern.pattern);
 
 /**
  * Check if the given user agent includes a bot pattern. Naive implementation (less accurate).

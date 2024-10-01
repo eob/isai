@@ -10,7 +10,7 @@ const TIMEOUT = 60000;
 const { update, end } = stdline;
 Object.freeze(list);
 
-const clone = (): string[] => list.slice();
+const clone = (): string[] => list.map((p) => p.pattern).slice();
 
 describe("efficiency", () => {
 	describe(`Redundant rules: no rule can be removed. Check each one against ${crawlers.length} user agent strings`, () => {
